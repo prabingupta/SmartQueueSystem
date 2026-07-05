@@ -15,4 +15,5 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {  # noqa: F405
     "user": "1000/minute",
     "anon": "200/minute",
+    "otp": "20/minute",
 }

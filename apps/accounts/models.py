@@ -73,3 +73,48 @@ class User(AbstractUser, TimeStampedModel, UUIDModel):
             self.Role.RECEPTION, self.Role.OPERATOR, self.Role.MANAGER,
             self.Role.DISTRICT_ADMIN, self.Role.SUPERVISOR, self.Role.ADMIN,
         }
+
+
+class PhoneOTP(TimeStampedModel, UUIDModel):
+    """
+    One-time codes sent by SMS for phone verification. A citizen account is
+    created with is_active=False until the REGISTRATION OTP is verified.
+    """
+    class Purpose(models.TextChoices):
+        REGISTRATION = "registration", "Registration"
+        LOGIN = "login", "Login"
+        PASSWORD_RESET = "password_reset", "Password Reset"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="phone_otps")
+    phone_number = models.CharField(max_length=15, db_index=True)
+    code = models.CharField(max_length=6)
+    purpose = models.CharField(max_length=20, choices=Purpose.choices, db_index=True)
+
+    is_used = models.BooleanField(default=False)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    max_attempts = models.PositiveSmallIntegerField(default=5)
+    expires_at = models.DateTimeField()
+
+    class Meta:
+        db_table = "accounts_phone_otp"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "purpose", "is_used"]),
+            models.Index(fields=["phone_number", "code"]),
+        ]
+
+    def __str__(self):
+        return f"OTP for {self.phone_number} ({self.get_purpose_display()})"
+
+    @property
+    def is_expired(self):
+        from django.utils import timezone
+        return timezone.now() > self.expires_at
+
+    def is_valid(self, code):
+        return (
+            not self.is_used
+            and not self.is_expired
+            and self.attempts < self.max_attempts
+            and self.code == code
+        )

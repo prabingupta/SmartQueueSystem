@@ -42,6 +42,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "drf_yasg",
     "django_filters",
@@ -170,6 +171,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "user": "120/minute",
         "anon": "30/minute",
+        "otp": "5/minute",
     },
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
@@ -260,3 +262,8 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Smart Queue <noreply@sma
 # ---------------------------------------------------------------------------
 YOLO_MODEL_PATH = env("YOLO_MODEL_PATH", default=str(BASE_DIR / "apps" / "crowd_ai" / "models" / "yolo11n.pt"))
 CROWD_ALERT_THRESHOLD = env.int("CROWD_ALERT_THRESHOLD", default=25)
+
+# ---------------------------------------------------------------------------
+# OTP (phone verification)
+# ---------------------------------------------------------------------------
+OTP_EXPIRY_MINUTES = env.int("OTP_EXPIRY_MINUTES", default=10)

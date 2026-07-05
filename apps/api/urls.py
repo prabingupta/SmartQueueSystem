@@ -1,16 +1,13 @@
 """
-Versioned REST API root.
-
-Each domain app will expose its own DRF routers under here in the
-REST APIs phase, e.g.:
-
-    path("accounts/", include("apps.accounts.api_urls")),
-    path("queue/", include("apps.queue_management.api_urls")),
+Versioned REST API root. Each domain app exposes its own routes here as
+it's built out.
 """
-from django.urls import path
+from django.urls import include, path
 
 app_name = "api"
 
 urlpatterns = [
-    # Populated per-app in the REST APIs phase.
+    path("accounts/", include("apps.accounts.api_urls")),
+    # Populated per-app in later phases:
+    # path("queue/", include("apps.queue_management.api_urls")),
 ]

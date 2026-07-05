@@ -21,6 +21,7 @@ class NotificationLog(TimeStampedModel, UUIDModel):
         COUNTER_CHANGED = "counter_changed", "Counter Changed"
         COMPLETED = "completed", "Completed"
         CANCELLED = "cancelled", "Cancelled"
+        OTP_VERIFICATION = "otp_verification", "OTP Verification"
 
     class Status(models.TextChoices):
         PENDING = "pending", "Pending"
