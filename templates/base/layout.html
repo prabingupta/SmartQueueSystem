@@ -1,16 +1,62 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+    <meta name="description" content="{{ SITE_TAGLINE }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header>{% block header %}{% endblock %}</header>
-    <main>{% block content %}{% endblock %}</main>
-    <footer>{% block footer %}{% endblock %}</footer>
+    {% block body %}
+    <div class="app-shell">
+        {% block sidebar %}{% endblock %}
+        <div class="main-content">
+            {% block topbar %}
+            <header class="topbar">
+                <div class="topbar-brand">
+                    {% if request.user.is_authenticated %}
+                    <button class="icon-btn mobile-nav-toggle" data-sidebar-mobile-toggle aria-label="Toggle menu">☰</button>
+                    {% endif %}
+                    <span class="topbar-emblem">SQ</span>
+                    <span>{{ SITE_NAME }}</span>
+                </div>
+                <div class="topbar-actions">
+                    <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode"><span data-theme-icon>☾</span></button>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'dashboard:home' %}" class="btn btn-secondary">Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-ghost">Log in</a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-primary">Book a Token</a>
+                    {% endif %}
+                </div>
+            </header>
+            {% endblock %}
+
+            <main class="page-content">
+                {% block content %}{% endblock %}
+            </main>
+
+            {% block footer %}
+            <footer class="section text-faint" style="border-top:1px solid var(--hairline); font-size:0.85rem;">
+                <div class="flex-between" style="max-width:1280px; margin:0 auto;">
+                    <span>&copy; {{ GOVERNMENT_NAME }} — {{ SITE_NAME }}</span>
+                    <span>{{ SITE_TAGLINE }}</span>
+                </div>
+            </footer>
+            {% endblock %}
+        </div>
+    </div>
+    {% endblock %}
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

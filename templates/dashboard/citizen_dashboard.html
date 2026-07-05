@@ -1,0 +1,56 @@
+{% extends "base/dashboard_shell.html" %}
+{% block title %}My Dashboard — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="flex-between" style="margin-bottom:var(--space-6);">
+    <div>
+        <span class="eyebrow">Good afternoon</span>
+        <h1 style="font-size:1.75rem;">Welcome back, Test User</h1>
+    </div>
+    <a href="#" class="btn btn-primary">+ Book a new token</a>
+</div>
+
+<h3>Your active token</h3>
+<div class="ticket-stub" style="margin-bottom:var(--space-6);">
+    <div class="ticket-stub-info">
+        <div class="eyebrow" style="color:var(--ink-faint);">Passport Office — Kathmandu</div>
+        <div class="service-name">New Passport Application</div>
+        <span class="badge badge-waiting">Waiting — 4 people ahead</span>
+        <p class="text-faint" style="margin-top:var(--space-3); margin-bottom:0;">Estimated wait: ~28 minutes</p>
+    </div>
+    <div class="ticket-stub-perforation"></div>
+    <div class="ticket-stub-number">
+        <div class="token-code">PSP-014</div>
+        <div class="token-caption">Today</div>
+    </div>
+</div>
+
+<h3>Overview</h3>
+<div class="grid-cards" style="margin-bottom:var(--space-6);">
+    <div class="card card-stat">
+        <span class="stat-value">12</span>
+        <span class="stat-label">Tokens this year</span>
+    </div>
+    <div class="card card-stat">
+        <span class="stat-value">3</span>
+        <span class="stat-label">Upcoming appointments</span>
+    </div>
+    <div class="card card-stat">
+        <span class="stat-value">4.8</span>
+        <span class="stat-label">Avg. satisfaction given</span>
+    </div>
+</div>
+
+<h3>Recent tokens</h3>
+<div class="table-wrap">
+    <table class="data-table">
+        <thead>
+            <tr><th>Token</th><th>Office</th><th>Service</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>PSP-014</td><td>Passport Office</td><td>New Passport Application</td><td>Today</td><td><span class="badge badge-waiting">Waiting</span></td></tr>
+            <tr><td>TRN-088</td><td>Transport Office</td><td>Vehicle Registration</td><td>Jun 28</td><td><span class="badge badge-completed">Completed</span></td></tr>
+            <tr><td>WRD-041</td><td>Ward Office 4</td><td>Recommendation Letter</td><td>Jun 12</td><td><span class="badge badge-cancelled">Cancelled</span></td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

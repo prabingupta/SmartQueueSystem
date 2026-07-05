@@ -1,2 +1,10 @@
 {% extends "base/layout.html" %}
-{% block content %}<h1>Error 403</h1><p>Something went wrong. Full styled error page arrives in the UI/UX phase.</p>{% endblock %}
+{% block title %}Access denied — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="section container-narrow" style="text-align:center; padding-top:var(--space-8);">
+    <span class="eyebrow">Error 403</span>
+    <h1>You don't have access to this page.</h1>
+    <p>This area is restricted to a different role. If you think this is a mistake, contact your office administrator.</p>
+    <a href="{% url 'dashboard:home' %}" class="btn btn-primary">Back to home</a>
+</div>
+{% endblock %}

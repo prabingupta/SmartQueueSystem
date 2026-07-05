@@ -1,0 +1,42 @@
+{% extends "base/layout.html" %}
+{% load static %}
+{% block title %}Log in — {{ SITE_NAME }}{% endblock %}
+{% block body %}
+<div class="auth-shell">
+    <div class="auth-panel">
+        <div class="auth-card">
+            <span class="eyebrow">Welcome back</span>
+            <h1 style="font-size:1.75rem; margin-top:var(--space-2);">Log in to your account</h1>
+            <p>Track your tokens, book new appointments, and manage your visits.</p>
+
+            <form method="post" action="#" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="username">Username or phone number</label>
+                    <input class="form-control" type="text" id="username" name="username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password" required>
+                    <p class="form-hint"><a href="{% url 'accounts:forgot-password' %}" class="text-soft">Forgot your password?</a></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Log in</button>
+            </form>
+
+            <p class="text-soft" style="margin-top:var(--space-5); text-align:center;">
+                Don't have an account? <a href="{% url 'accounts:register' %}" style="color:var(--crimson-dark); font-weight:600;">Create one</a>
+            </p>
+        </div>
+    </div>
+    <div class="auth-side">
+        <div class="topbar-brand" style="color:#fff;">
+            <span class="topbar-emblem">SQ</span>
+            <span>{{ SITE_NAME }}</span>
+        </div>
+        <div>
+            <h2 style="color:#fff; font-size:2rem;">No more standing in line.</h2>
+            <p style="color:rgba(255,255,255,0.75);">Book your token online, watch the queue move in real time, and arrive exactly when it's your turn.</p>
+        </div>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.85rem;">{{ GOVERNMENT_NAME }}</p>
+    </div>
+</div>
+{% endblock %}

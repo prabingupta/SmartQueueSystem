@@ -1,0 +1,17 @@
+{% extends "base/layout.html" %}
+{% block sidebar %}
+<aside class="sidebar" data-sidebar>
+    <nav>
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'dashboard:home' %}" class="{% if active_nav == 'overview' %}active{% endif %}"><span class="nav-icon">⌂</span><span class="nav-label">Overview</span></a></li>
+            <li><a href="#" class="{% if active_nav == 'tokens' %}active{% endif %}"><span class="nav-icon">▤</span><span class="nav-label">My Tokens</span></a></li>
+            <li><a href="#" class="{% if active_nav == 'book' %}active{% endif %}"><span class="nav-icon">+</span><span class="nav-label">Book a Token</span></a></li>
+            <li><a href="#" class="{% if active_nav == 'notifications' %}active{% endif %}"><span class="nav-icon">◔</span><span class="nav-label">Notifications</span></a></li>
+            <li><a href="#" class="{% if active_nav == 'profile' %}active{% endif %}"><span class="nav-icon">◍</span><span class="nav-label">Profile</span></a></li>
+        </ul>
+    </nav>
+    <div style="margin-top:var(--space-8); padding-top:var(--space-5); border-top:1px solid var(--hairline);">
+        <button class="icon-btn" data-sidebar-collapse aria-label="Collapse sidebar" style="width:100%;">⟪</button>
+    </div>
+</aside>
+{% endblock %}

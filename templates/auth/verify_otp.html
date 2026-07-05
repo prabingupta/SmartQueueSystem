@@ -1,0 +1,24 @@
+{% extends "base/layout.html" %}
+{% block title %}Verify your phone — {{ SITE_NAME }}{% endblock %}
+{% block body %}
+<div class="section" style="display:flex; align-items:center; justify-content:center; min-height:100vh;">
+    <div class="card container-narrow" style="max-width:420px; text-align:center;">
+        <span class="eyebrow">One more step</span>
+        <h1 style="font-size:1.6rem; margin-top:var(--space-2);">Enter the verification code</h1>
+        <p>We sent a 6-digit code by SMS to your phone number. Enter it below to activate your account.</p>
+
+        <form method="post" action="#" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="code">Verification code</label>
+                <input class="form-control" type="text" id="code" name="code" maxlength="6" inputmode="numeric"
+                       style="text-align:center; font-family:var(--font-mono); font-size:1.5rem; letter-spacing:0.3em;" required autofocus>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Verify and continue</button>
+        </form>
+
+        <p class="text-soft" style="margin-top:var(--space-4);">
+            Didn't get a code? <button type="button" class="btn btn-ghost" style="padding:0;">Resend code</button>
+        </p>
+    </div>
+</div>
+{% endblock %}

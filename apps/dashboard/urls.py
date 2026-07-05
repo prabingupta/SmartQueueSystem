@@ -10,4 +10,5 @@ app_name = "dashboard"
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("dashboard/citizen-preview/", views.citizen_dashboard_preview, name="citizen-dashboard-preview"),
 ]
