@@ -5,9 +5,9 @@
     <div class="card container-narrow" style="max-width:420px; text-align:center;">
         <span class="eyebrow">One more step</span>
         <h1 style="font-size:1.6rem; margin-top:var(--space-2);">Enter the verification code</h1>
-        <p>We sent a 6-digit code by SMS to your phone number. Enter it below to activate your account.</p>
+        <p>We sent a 6-digit code by SMS to <strong data-phone-display>your phone number</strong>. Enter it below to activate your account.</p>
 
-        <form method="post" action="#" novalidate>
+        <form data-auth-form="verify-otp" novalidate>
             <div class="form-group">
                 <label class="form-label" for="code">Verification code</label>
                 <input class="form-control" type="text" id="code" name="code" maxlength="6" inputmode="numeric"
@@ -17,7 +17,7 @@
         </form>
 
         <p class="text-soft" style="margin-top:var(--space-4);">
-            Didn't get a code? <button type="button" class="btn btn-ghost" style="padding:0;">Resend code</button>
+            Didn't get a code? <button type="button" data-resend-otp class="btn btn-ghost" style="padding:0;">Resend code</button>
         </p>
     </div>
 </div>
