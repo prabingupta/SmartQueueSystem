@@ -33,6 +33,19 @@ class OTPThrottle(AnonRateThrottle):
     scope = "otp"
 
 
+def _attach_dev_otp(payload, otp):
+    """
+    Dev convenience only: when DEBUG is on and no real SMS gateway is
+    configured, echo the OTP code back in the API response so it can be
+    shown directly in the browser instead of requiring terminal/DB access.
+    Hard-gated on settings.DEBUG — never runs in production.
+    """
+    from django.conf import settings
+
+    if settings.DEBUG and not (settings.SMS_GATEWAY_API_KEY and settings.SMS_GATEWAY_URL):
+        payload["dev_otp_code"] = otp.code
+
+
 class RegisterView(generics.CreateAPIView):
     """Creates an inactive citizen account and sends a registration OTP."""
     queryset = User.objects.all()
@@ -44,12 +57,13 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        issue_otp(user, user.phone_number, PhoneOTP.Purpose.REGISTRATION)
-        return Response(
-            {"detail": "Registration successful. Enter the OTP sent to your phone to activate your account.",
-             "phone_number": user.phone_number},
-            status=status.HTTP_201_CREATED,
-        )
+        otp = issue_otp(user, user.phone_number, PhoneOTP.Purpose.REGISTRATION)
+        payload = {
+            "detail": "Registration successful. Enter the OTP sent to your phone to activate your account.",
+            "phone_number": user.phone_number,
+        }
+        _attach_dev_otp(payload, otp)
+        return Response(payload, status=status.HTTP_201_CREATED)
 
 
 class VerifyOTPView(APIView):
@@ -81,8 +95,10 @@ class ResendOTPView(APIView):
         serializer = ResendOTPSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = User.objects.get(phone_number=serializer.validated_data["phone_number"])
-        issue_otp(user, user.phone_number, serializer.validated_data["purpose"])
-        return Response({"detail": "A new verification code has been sent."}, status=status.HTTP_200_OK)
+        otp = issue_otp(user, user.phone_number, serializer.validated_data["purpose"])
+        payload = {"detail": "A new verification code has been sent."}
+        _attach_dev_otp(payload, otp)
+        return Response(payload, status=status.HTTP_200_OK)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

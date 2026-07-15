@@ -9,6 +9,7 @@
   const LOGIN_URL = "/accounts/login/";
   const VERIFY_OTP_URL = "/accounts/verify-otp/";
   const PENDING_PHONE_KEY = "sqms_pending_phone";
+  const DEV_OTP_KEY = "sqms_dev_otp";
 
   function showFormError(form, message) {
     let banner = form.querySelector("[data-form-error]");
@@ -58,8 +59,9 @@
       };
       setLoading(button, true, "Creating account…");
       try {
-        await SQMSApi.post("/register/", payload);
+        const data = await SQMSApi.post("/register/", payload);
         sessionStorage.setItem(PENDING_PHONE_KEY, payload.phone_number);
+        if (data.dev_otp_code) sessionStorage.setItem(DEV_OTP_KEY, data.dev_otp_code);
         window.location.href = VERIFY_OTP_URL;
       } catch (err) {
         showFormError(form, err.message);
@@ -76,6 +78,16 @@
     const phoneDisplay = form.querySelector("[data-phone-display]");
     if (phone && phoneDisplay) phoneDisplay.textContent = phone;
 
+    const devOtp = sessionStorage.getItem(DEV_OTP_KEY);
+    if (devOtp) {
+      form.code.value = devOtp;
+      const hint = document.createElement("p");
+      hint.className = "text-faint";
+      hint.style.cssText = "font-size:0.8rem;";
+      hint.textContent = `Dev mode — no SMS gateway configured. Code auto-filled from server: ${devOtp}`;
+      form.parentElement.insertBefore(hint, form);
+    }
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearFormError(form);
@@ -88,6 +100,7 @@
       try {
         await SQMSApi.post("/verify-otp/", { phone_number: phone, code: form.code.value.trim(), purpose: "registration" });
         sessionStorage.removeItem(PENDING_PHONE_KEY);
+        sessionStorage.removeItem(DEV_OTP_KEY);
         window.showToast && window.showToast("Phone verified. You can now log in.");
         window.location.href = LOGIN_URL;
       } catch (err) {
@@ -102,7 +115,11 @@
         if (!phone) return;
         resendBtn.disabled = true;
         try {
-          await SQMSApi.post("/resend-otp/", { phone_number: phone, purpose: "registration" });
+          const data = await SQMSApi.post("/resend-otp/", { phone_number: phone, purpose: "registration" });
+          if (data.dev_otp_code) {
+            sessionStorage.setItem(DEV_OTP_KEY, data.dev_otp_code);
+            form.code.value = data.dev_otp_code;
+          }
           window.showToast && window.showToast("A new code has been sent.");
         } catch (err) {
           showFormError(form, err.message);
