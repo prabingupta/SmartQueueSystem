@@ -8,6 +8,7 @@ app_name = "api"
 
 urlpatterns = [
     path("accounts/", include("apps.accounts.api_urls")),
-    # Populated per-app in later phases:
-    # path("queue/", include("apps.queue_management.api_urls")),
+    path("offices/", include("apps.offices.api_urls")),
+    path("services/", include("apps.services.api_urls")),
+    path("queue/", include("apps.queue_management.api_urls")),
 ]
